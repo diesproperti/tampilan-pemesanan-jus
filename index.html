@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jus Segar - Order Fresh Juice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .page {
+            display: none;
+        }
+        .active-page {
+            display: block;
+        }
+        .juice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .category-btn.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .cart-item {
+            transition: all 0.3s ease;
+        }
+        .cart-item:hover {
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-green-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="img/Logo Minuman Jus Hijau Kuning Minimalis.png" alt="Jus Segar logo - a green leaf with a juice droplet" class="h-10">
+                <span class="text-xl font-bold">Jus Segar Ardiesky & Co.</span>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="showPage('home')" class="px-3 py-2 rounded hover:bg-green-700">Menu</button>
+                <button onclick="showPage('cart')" class="px-3 py-2 rounded hover:bg-green-700 flex items-center">
+                    <span id="cart-count">0</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active-page container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-green-800 mb-6">Menu Jus Segar</h1>
+        
+        <!-- Category Filters -->
+        <div class="flex space-x-2 mb-8 overflow-x-auto pb-2">
+            <button onclick="filterJuices('all')" class="category-btn active px-4 py-2 bg-orange-400 text-white rounded-full">Semua</button>
+            <button onclick="filterJuices('fruit')" class="category-btn px-4 py-2 bg-yellow-400 text-white rounded-full">Buah</button>
+            <button onclick="filterJuices('vegetable')" class="category-btn px-4 py-2 bg-green-500 text-white rounded-full">Sayur</button>
+            <button onclick="filterJuices('combo')" class="category-btn px-4 py-2 bg-orange-500 text-white rounded-full">Kombinasi</button>
+        </div>
+        
+        <!-- Juice Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Juice Card 1 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="fruit">
+                <img src="img/jus jeruk.jpg" alt="Fresh orange juice in a tall glass with orange slices on the rim" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Jeruk</h3>
+                    <p class="text-gray-600 mt-2">Segar langsung dari perkebunan jeruk, kaya vitamin C.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 15.000</span>
+                        <button onclick="addToCart('Jus Jeruk', 15000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juice Card 2 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="fruit">
+                <img src="img/jus semangka.jfif" alt="Refreshing watermelon juice in a jar with watermelon cubes" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Semangka</h3>
+                    <p class="text-gray-600 mt-2">Manis alami semangka merah, menyegarkan di hari panas.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 12.000</span>
+                        <button onclick="addToCart('Jus Semangka', 12000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juice Card 3 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="vegetable">
+                <img src="img/jus bayam.jfif" alt="Healthy green spinach juice in a glass bottle with spinach leaves" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Bayam</h3>
+                    <p class="text-gray-600 mt-2">Kaya zat besi dan nutrisi untuk kesehatan optimal.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 10.000</span>
+                        <button onclick="addToCart('Jus Bayam', 10000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juice Card 4 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="vegetable">
+                <img src="img/jus wortel.jfif" alt="Fresh carrot juice in a mason jar with carrot sticks" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Wortel</h3>
+                    <p class="text-gray-600 mt-2">Sumber vitamin A alami untuk kesehatan mata.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 10.000</span>
+                        <button onclick="addToCart('Jus Wortel', 10000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juice Card 5 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="combo">
+                <img src="img/jus tropis.jfif" alt="Tropical juice blend with mango, pineapple and orange in a coconut shell" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Tropis</h3>
+                    <p class="text-gray-600 mt-2">Kombinasi mangga, nanas, dan jeruk untuk rasa tropis.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 18.000</span>
+                        <button onclick="addToCart('Jus Tropis', 18000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Juice Card 6 -->
+            <div class="juice-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300" data-category="combo">
+                <img src="img/jus detox.jfif" alt="Green detox juice with kale, cucumber, apple and lemon in a glass" class="w-full h-48 object-cover">
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Jus Detox</h3>
+                    <p class="text-gray-600 mt-2">Kale, mentimun, apel, dan lemon untuk detoksifikasi.</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-lg font-bold text-green-700">Rp 20.000</span>
+                        <button onclick="addToCart('Jus Detox', 20000, 'https://placehold.co/600x400')" class="px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-500">Tambah</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cart" class="page container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-green-800 mb-6">Keranjang Belanja</h1>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div id="cart-items" class="divide-y divide-gray-200">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-8 text-gray-500" id="empty-cart-message">
+                    Keranjang Anda kosong. Silakan tambahkan jus dari menu.
+                </div>
+            </div>
+            
+            <div class="p-4 bg-gray-50 border-t border-gray-200">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="font-semibold text-lg">Total:</span>
+                    <span id="cart-total" class="font-bold text-xl text-green-700">Rp 0</span>
+                </div>
+                <button onclick="showPage('checkout')" id="checkout-btn" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Lanjut ke Pembayaran
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Page -->
+    <div id="checkout" class="page container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-green-800 mb-6">Checkout</h1>
+        
+        <div class="flex flex-col lg:flex-row gap-8">
+            <div class="lg:w-1/2">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Ringkasan Pesanan</h2>
+                    <div id="checkout-items" class="divide-y divide-gray-200">
+                        <!-- Order items will be added here dynamically -->
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                        <span class="font-semibold text-lg">Total:</span>
+                        <span id="checkout-total" class="font-bold text-xl text-green-700">Rp 0</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Informasi Pengiriman</h2>
+                    <form id="checkout-form">
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 mb-2">Nama Lengkap</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="phone" class="block text-gray-700 mb-2">Nomor HP</label>
+                            <input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="address" class="block text-gray-700 mb-2">Alamat Lengkap</label>
+                            <textarea id="address" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required></textarea>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">Metode Pembayaran</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="radio" id="cod" name="payment" value="COD" class="h-4 w-4 text-green-600 focus:ring-green-500" checked>
+                                    <label for="cod" class="ml-2 block text-gray-700">COD (Bayar di Tempat)</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="transfer" name="payment" value="Transfer" class="h-4 w-4 text-green-600 focus:ring-green-500">
+                                    <label for="transfer" class="ml-2 block text-gray-700">Transfer Bank</label>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="radio" id="qris" name="payment" value="QRIS" class="h-4 w-4 text-green-600 focus:ring-green-500">
+                                    <label for="qris" class="ml-2 block text-gray-700">QRIS</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="processCheckout()" class="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700">Pesan Sekarang</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2 hidden lg:block">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-8">
+                    <img src="img/Logo Minuman Jus Hijau Kuning Minimalis.png" alt="Illustration of various fresh juices in different glasses with fruits around them" class="w-full h-auto rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Jus Segar Langsung ke Rumah Anda</h3>
+                    <p class="text-gray-600">Kami menggunakan bahan-bahan segar setiap hari untuk memberikan kualitas terbaik. Pesan sekarang dan dapatkan dalam 30-45 menit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Confirmation Page -->
+    <div id="confirmation" class="page container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-8 text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-green-800 mb-4">Terima kasih! Pesanan Anda sedang diproses.</h1>
+                <p class="text-gray-600 mb-8">Kami akan segera menghubungi Anda untuk konfirmasi pesanan.</p>
+                
+                <div class="bg-green-50 rounded-lg p-6 mb-8 text-left">
+                    <h2 class="text-xl font-semibold text-green-800 mb-4">Ringkasan Pesanan</h2>
+                    <div id="confirmation-details">
+                        <!-- Order details will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <img src="https://placehold.co/600x300" alt="Happy person drinking fresh juice with a smile, sitting at a table with various fruits" class="w-full h-auto rounded-lg mb-8">
+                
+                <button onclick="showPage('home')" class="px-6 py-3 bg-yellow-400 text-white rounded-lg hover:bg-yellow-500 font-semibold">
+                    Kembali ke Beranda
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cart data
+        let cart = [];
+        
+        // Show specific page and hide others
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active-page');
+            });
+            document.getElementById(pageId).classList.add('active-page');
+            updateCartDisplay();
+        }
+        
+        // Filter juices by category
+        function filterJuices(category) {
+            const juices = document.querySelectorAll('.juice-card');
+            const buttons = document.querySelectorAll('.category-btn');
+            
+            buttons.forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(category) || (category === 'all' && btn.textContent === 'Semua')) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            juices.forEach(juice => {
+                if (category === 'all' || juice.dataset.category === category) {
+                    juice.style.display = 'block';
+                } else {
+                    juice.style.display = 'none';
+                }
+            });
+        }
+        
+        // Add item to cart
+        function addToCart(name, price, image) {
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    name: name,
+                    price: price,
+                    image: image,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            showPage('cart');
+        }
+        
+        // Update cart quantity
+        function updateCartItem(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            updateCartDisplay();
+        }
+        
+        // Remove item from cart
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
+        
+        // Update cart display in all pages
+        function updateCartDisplay() {
+            // Update cart count in navigation
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+            
+            // Update cart page
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                checkoutBtn.disabled = true;
+                cartItemsContainer.innerHTML = '';
+                cartItemsContainer.appendChild(emptyCartMessage);
+            } else {
+                emptyCartMessage.style.display = 'none';
+                checkoutBtn.disabled = false;
+                
+                let cartItemsHTML = '';
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    cartItemsHTML += `
+                        <div class="cart-item p-4 flex items-center">
+                            <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                            <div class="ml-4 flex-grow">
+                                <h3 class="font-semibold text-gray-800">${item.name}</h3>
+                                <div class="flex items-center mt-2">
+                                    <button onclick="updateCartItem(${index}, -1)" class="px-2 py-1 bg-gray-200 rounded">-</button>
+                                    <span class="mx-2">${item.quantity}</span>
+                                    <button onclick="updateCartItem(${index}, 1)" class="px-2 py-1 bg-gray-200 rounded">+</button>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="block font-semibold text-green-700">Rp ${itemTotal.toLocaleString()}</span>
+                                <button onclick="removeCartItem(${index})" class="mt-1 text-sm text-red-500 hover:text-red-700">Hapus</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML = cartItemsHTML;
+                document.getElementById('cart-total').textContent = `Rp ${total.toLocaleString()}`;
+            }
+            
+            // Update checkout page
+            updateCheckoutDisplay();
+        }
+        
+        // Update checkout display
+        function updateCheckoutDisplay() {
+            const checkoutItemsContainer = document.getElementById('checkout-items');
+            let checkoutItemsHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                checkoutItemsHTML += `
+                    <div class="py-3 flex justify-between">
+                        <div>
+                            <span class="font-medium">${item.name}</span>
+                            <span class="text-gray-500 block text-sm">${item.quantity} x Rp ${item.price.toLocaleString()}</span>
+                        </div>
+                        <span class="font-medium">Rp ${itemTotal.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+            
+            checkoutItemsContainer.innerHTML = checkoutItemsHTML;
+            document.getElementById('checkout-total').textContent = `Rp ${total.toLocaleString()}`;
+        }
+        
+        // Process checkout
+        function processCheckout() {
+            const form = document.getElementById('checkout-form');
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            
+            if (!name || !phone || !address) {
+                alert('Harap lengkapi semua informasi pengiriman');
+                return;
+            }
+            
+            // Generate random order number
+            const orderNumber = 'JS-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            
+            // Calculate delivery time (30-45 minutes from now)
+            const now = new Date();
+            const deliveryTime = new Date(now.getTime() + 30 * 60000 + Math.floor(Math.random() * 15) * 60000);
+            const deliveryTimeString = deliveryTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            
+            // Update confirmation page
+            const confirmationDetails = document.getElementById('confirmation-details');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            confirmationDetails.innerHTML = `
+                <div class="mb-2">
+                    <span class="text-gray-600">Nomor Pesanan:</span>
+                    <span class="font-medium">${orderNumber}</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-600">Nama:</span>
+                    <span class="font-medium">${name}</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-600">Nomor HP:</span>
+                    <span class="font-medium">${phone}</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-600">Alamat:</span>
+                    <span class="font-medium">${address}</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-600">Metode Pembayaran:</span>
+                    <span class="font-medium">${paymentMethod}</span>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-600">Total:</span>
+                    <span class="font-medium text-green-700">Rp ${total.toLocaleString()}</span>
+                </div>
+                <div>
+                    <span class="text-gray-600">Estimasi Waktu Kirim:</span>
+                    <span class="font-medium">${deliveryTimeString}</span>
+                </div>
+            `;
+            
+            // Clear cart
+            cart = [];
+            updateCartDisplay();
+            
+            // Clear form
+            form.reset();
+            
+            // Show confirmation page
+            showPage('confirmation');
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
